@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linked List Reversal Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        #visualization {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .node {
+            width: 50px;
+            height: 50px;
+            background-color: #4CAF50;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+        .arrow {
+            width: 30px;
+            height: 2px;
+            background-color: #333;
+            position: relative;
+            align-self: center;
+        }
+        .arrow::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 8px solid #333;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+        #explanation {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Linked List Reversal Visualization</h1>
+        <button id="singly">Reverse Singly Linked List</button>
+        <button id="doubly">Reverse Doubly Linked List</button>
+        <div id="visualization"></div>
+        <div id="explanation"></div>
+    </div>
+    <script>
+        class Node {
+            constructor(value) {
+                this.value = value;
+                this.next = null;
+                this.prev = null;
+            }
+        }
+
+        class LinkedList {
+            constructor() {
+                this.head = null;
+            }
+
+            add(value) {
+                const newNode = new Node(value);
+                if (!this.head) {
+                    this.head = newNode;
+                } else {
+                    let current = this.head;
+                    while (current.next) {
+                        current = current.next;
+                    }
+                    current.next = newNode;
+                    if (this.isDoubly) {
+                        newNode.prev = current;
+                    }
+                }
+            }
+
+            reverse() {
+                let prev = null;
+                let current = this.head;
+                let next = null;
+
+                while (current !== null) {
+                    next = current.next;
+                    current.next = prev;
+                    if (this.isDoubly) {
+                        current.prev = next;
+                    }
+                    prev = current;
+                    current = next;
+                }
+
+                this.head = prev;
+            }
+        }
+
+        const visualizationDiv = document.getElementById('visualization');
+        const explanationDiv = document.getElementById('explanation');
+        const singlyButton = document.getElementById('singly');
+        const doublyButton = document.getElementById('doubly');
+
+        function createVisualization(list, isDoubly) {
+            visualizationDiv.innerHTML = '';
+            let current = list.head;
+            while (current) {
+                const nodeDiv = document.createElement('div');
+                nodeDiv.className = 'node';
+                nodeDiv.textContent = current.value;
+                visualizationDiv.appendChild(nodeDiv);
+
+                if (current.next) {
+                    const arrowDiv = document.createElement('div');
+                    arrowDiv.className = 'arrow';
+                    visualizationDiv.appendChild(arrowDiv);
+                }
+
+                current = current.next;
+            }
+        }
+
+        function reverseList(isDoubly) {
+            const list = new LinkedList();
+            list.isDoubly = isDoubly;
+            for (let i = 1; i <= 5; i++) {
+                list.add(i);
+            }
+
+            createVisualization(list, isDoubly);
+            explanationDiv.innerHTML = '<h2>Initial List</h2>';
+
+            setTimeout(() => {
+                list.reverse();
+                createVisualization(list, isDoubly);
+                explanationDiv.innerHTML += `
+                    <h2>Reversed List</h2>
+                    <p>Steps to reverse a ${isDoubly ? 'doubly' : 'singly'} linked list:</p>
+                    <ol>
+                        <li>Initialize three pointers: prev (null), current (head), and next (null).</li>
+                        <li>Iterate through the list:</li>
+                        <ul>
+                            <li>Store the next node: next = current.next</li>
+                            <li>Reverse the current node's pointer: current.next = prev</li>
+                            ${isDoubly ? '<li>For doubly linked list, also update prev pointer: current.prev = next</li>' : ''}
+                            <li>Move prev and current one step forward:</li>
+                            <ul>
+                                <li>prev = current</li>
+                                <li>current = next</li>
+                            </ul>
+                        </ul>
+                        <li>Set the new head to prev (last node of original list).</li>
+                    </ol>
+                    <p>Time Complexity: O(n), where n is the number of nodes in the list.</p>
+                    <p>Space Complexity: O(1), as we only use a constant amount of extra space.</p>
+                `;
+            }, 1000);
+        }
+
+        singlyButton.addEventListener('click', () => reverseList(false));
+        doublyButton.addEventListener('click', () => reverseList(true));
+    </script>
+</body>
+</html>
