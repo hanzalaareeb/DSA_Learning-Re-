@@ -1,4 +1,4 @@
-# Linked List Reversal Visualization
+# DSA using Visualization
 
 This project visualizes the process of reversing a singly and doubly linked list using HTML, CSS, and JavaScript. The visualization includes a step-by-step explanation of each operation performed during the reversal.
 
