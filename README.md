@@ -16,11 +16,15 @@ This project visualizes the process of reversing a singly and doubly linked list
 3. Click the "Reverse Doubly Linked List" button to visualize the reversal of a doubly linked list.
 4. Follow the explanations provided to understand the reversal process.
 
-## Files
+# Added Codes for future refrance
 
-- `index.html`: The main HTML file containing the structure of the page.
-- `styles.css`: The CSS file for styling the page.
-- `script.js`: The JavaScript file for handling the logic and animations.
+1. Codes of different algo are also added in the folder
+
+```
+    code_collection
+```
+
+2. The code for singly linked list is in the folder (as per the most recent update)
 
 ## Acknowledgements
 
